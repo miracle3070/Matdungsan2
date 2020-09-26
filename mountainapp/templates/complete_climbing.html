@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>맛등산 :: 완등하는 사이트</title>
+</head>
+<body>
+    <h2>완등 페이지</h2>
+    페이지 주인 정보 : 프로필이름: {{profile.name}} / 프로필별명 : {{profile.nickname}} / 산 등반 개수{{count.count}}
+    <form method="GET" action="{% url 'search_mountain' %}">
+        <fieldset>
+            <legend>산 검색</legend>
+            <input type="search" name="search">
+            <input type="submit" value="검색">
+        </fieldset>
+    </form>
+
+    <h2>산 리스트</h2>
+    {% for mt in mountains %}
+        <fieldset>
+            <p>산 이름 : {{mt.name}}</p>
+            <p>산 주소 : {{ mt.address }}</p>
+            <p>완등한 사람 수 : {{mt.completed_count}}</p>
+            {% if request.user not in mt.completed.all %}
+                <form method="POST" action="{% url 'complete_climbing' request.user %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="mt.name" value="{{mt.name}}">
+                    <input type="submit" value="완등">
+                </form>
+            {% else %}
+                <form method="POST" action="{% url 'complete_climbing' request.user %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="mt.name" value="{{mt.name}}">
+                    <input type="submit" value="완등취소">
+                </form>
+            {% endif %}
+        </fieldset>
+    {% endfor %}
+    
+</body>
+</html>

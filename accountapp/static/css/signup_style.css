@@ -1,0 +1,138 @@
+@font-face { 
+    font-family: 'NanumSquareRound'; 
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff'); 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+
+}
+
+body{
+    background-color:#D4FFE3;
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+}
+
+.sign-up h1{
+    margin-bottom: 10px;
+    font-size:50px;
+}
+
+.sign-up p{
+    margin-bottom: 40px;
+    font-size: 20px;
+    padding: 0 50px 10px 50px;
+    border-bottom:1px solid #CACACA;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+.sign-up{
+    display:flex;
+    flex-direction:column;
+    flex-wrap:nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color:#fff;
+    margin-top:100px;
+    margin-bottom: 100px;
+    width:30%;
+    height:650px;
+    border-radius:7%;
+
+}
+
+.sign-up li{
+    list-style-type:none;
+    margin-bottom: 18px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+.id input{
+    width: 120px;
+    height: 30px;
+    margin-left: 16px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+    
+}
+
+.password input{
+    width: 150px;
+    height: 30px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+    margin-left:1.5px;
+}
+
+.name input{
+    width: 100px;
+    height: 30px;
+    margin-left:30px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+.nickname input{
+    width: 100px;
+    height: 30px;
+    margin-left:16px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+.gender select{
+    margin-left:30px;
+    height: 25px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+.age select{
+    margin-left:16px;
+    height: 25px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+.e-mail input{
+    width: 150px;
+    height: 30px;
+    margin-left: 16px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+.button {
+    text-align: center;
+    margin-left:33%;
+    margin-top: 10px;
+    width:120px;
+    margin-bottom: 20px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+.comment p  {
+    font-size:10px;
+    font-family: 'NanumSquareRound'; 
+    font-weight: normal; 
+    font-style: normal;     
+}

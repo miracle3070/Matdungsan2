@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/login_style.css' %}">
+{% endblock css %}
+
+{% block contents %}
+<div class="log-in" style="margin-top:200px">
+    <h1>MDS</h1>
+    <p>당신의 산행을 공유하세요!</p>
+    <form action="{% url 'login' %}" method="POST">
+        {%csrf_token%}
+        <input placeholder="아이디" name="id" type="text">
+        <br><br>
+        <input placeholder="비밀번호" name="password" type="password">
+        <br><br>
+        <button class="button"> 로그인 </button>
+    </form>
+    <div class="comment">
+        <p>아이디가 없으세요? <a href="{% url 'signup' %}" style="text-decoration: none;">회원가입</a></p>
+    </div>
+</div>
+{% endblock %}

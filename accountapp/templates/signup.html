@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/signup_style.css' %}">
+{% endblock css %}
+
+{% block contents %}
+<div class="sign-up" style="margin-top:200px">
+    <h1>MDS</h1>
+    <p>당신의 산행을 공유하세요!</p>
+
+    <form action="{% url 'signup' %}" method="POST">
+        {% csrf_token %}
+        <ul>
+            <li class="id">
+                아이디
+                <input placeholder="아이디" name="id" type="text" value="" />
+            </li>
+            <li class="password">
+                비밀번호
+                <input name="password1" type="password" value="" placeholder="비밀번호" />
+            </li>
+            <li class="password">
+                비밀번호
+                <input name="password2" type="password" value="" placeholder="비밀번호확인" />
+            </li>
+            <li class="name">
+                이름
+                <input name="name" type="text" placeholder="이름" />
+            </li>
+            <li class="nickname">
+                닉네임
+                <input name="nickname" type="text" placeholder="닉네임" />
+            </li>
+            <li class="gender">
+                성별
+                <select name="gender">
+                    <option value="남성">남자</option>
+                    <option value="여성">여자</option>
+                </select>
+            </li>
+            <li class="age">
+                연령대
+                <select name="age_group">
+                    <option value="10대">10대</option>
+                    <option value="20대">20대</option>
+                    <option value="30대">30대</option>
+                    <option value="40대">40대</option>
+                    <option value="50대">50대</option>
+                    <option value="60대">60대</option>
+                    <option value="60대 이상">60대 이상</option>
+                </select>
+            </li>
+            <li class="e-mail">
+                이메일
+                <input placeholder="이메일" name="email" type="email" />
+            </li>
+        </ul>
+        <input type="hidden" name="grade" value="등린이">
+
+        <button class="button" aria-label="admit-id">
+            회원가입
+        </button>
+
+    </form>
+
+    <div class="comment">
+        <p>이미 아이디가 있으세요? <a href="{% url 'login' %}">로그인</a></p>
+    </div>
+
+</div>
+{% endblock %}

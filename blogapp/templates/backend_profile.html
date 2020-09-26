@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% block contents %}
+<div style="margin-top:100px;"></div>
+<div id="post_id" style="display : none">
+    {% for blog in blogs.all %}
+    {{blog.id}},
+    {% endfor %}
+</div>
+
+<div id="post_lat" style="display : none">
+    {% for blog in blogs.all %}
+    {{blog.latitude}},
+    {% endfor %}
+</div>
+
+<div id="post_lng" style="display : none">
+    {% for blog in blogs.all %}
+    {{blog.longtitude}},
+    {% endfor %}
+</div>
+
+<div id="post_title" style="display : none">
+    {% for blog in blogs.all %}
+    {{blog.title}},
+    {% endfor %}
+</div>
+
+<div id="post_rating" style="display : none">
+    {% for blog in blogs.all %}
+    {{blog.rating}},
+    {% endfor %}
+</div>
+
+<div id="post_content" style="display : none">
+    {% for blog in blogs.all %}
+    {{blog.content}},
+    {% endfor %}
+</div>
+
+<div id="post_image" style="display : none">
+    {% for blog in blogs.all %}
+    {{blog.image.url}},
+    {% endfor %}
+</div>
+<div>
+    <div class="card top_content">
+        <div class="card-body">
+            <div class="row">
+                <span class="col">
+                    <h4 class="card-title">
+                        {% if profile.image %}
+                        <img src="{{profile.image.url}}" alt="" width="320" height="100" class="profile-image">
+                        {% else %}
+                        <img src="http://placehold.it/320x100" alt="" class="profile-image">
+                        {% endif %}
+
+                    </h4>
+                </span>
+                <span class="col">
+                    <div class="nickname">{{profile.nickname}}({{profile.user.username}})</div>
+                    <span class="name">{{profile.name}} / {{profile.gender}}</span><br>
+                    <span class="grade">등급 : {{profile.grade}}</span><br>
+                    <div>이메일 : {{profile.user.email}}</div>
+                    <div>연령대 : {{profile.age_group}}</div>
+                    <span class="following_count">팔로워수(나를 팔로우 하는 사람 수) : {{followers.count}}</span><br>
+                    <span class="follower_count">팔로잉수(내가 팔로우 하는사람 수) : {{followees.count}}</span><br>
+                    {%if request.user == profile.user or request.user.is_staff %}
+                    <!-- 댓글쓴이와 로그인한 유저가 같을 때 보이는 화면 -->
+                    <form action="{% url 'update_profile' user.username %}">
+                        <button type="submit" class="btn btn-light" value="">프로필 편집</button>
+                    </form>
+                    {%endif%}
+                    {%if request.user != profile.user or request.user.is_staff %}
+                    <!-- 댓글쓴이와 로그인한 유저가 다를 때 보이는 화면 -->
+                    <button id="{{profile.user.id}}" onclick="follow(this.id)"> 
+                        {% if request.user in profile.following.all %}
+                            <!-- 로그인한 유저가 팔로우한 유저일때-->
+                            <i id="heart" class="fas fa-heart"></i>
+                            {% else %}
+                            <!-- 로그인한 유저가 팔로우한 유저가 아닐때 -->
+                            <i id="heart" class="far fa-heart"></i>
+                            {% endif %}
+                    </button>
+                    {%endif%}
+                </span>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="left_content">
+        {% for blog in posts %}
+        <span id="post_image" style="">
+            <img src="{{blog.image.url}}" alt=" " style="width: 150px; height: 150px;float:left; width:33%" onclick="javascript:location.href='{% url 'detail' blog.id %}'">
+        </span>
+        {% if forloop.counter|divisibleby:"3" %}
+        <br>
+        {% endif %}
+        {% endfor %}
+    </div>
+    
+    {%if posts.has_previous%}
+    <a href="?page={{posts.previous_page_number}}">Previous</a>
+    {%endif%}
+    <span>{{posts.number}}</span>
+    {%if posts.has_next%}
+    <a href="?page={{posts.next_page_number}}">Next</a>
+    {%endif%}
+    
+    <div class="right_content">
+        <div class="class_map">
+            <div class="main_container"></div>
+            <div class="main-map">
+                <div id="map" style="width:500px;height:500px;"></div>
+                <!-- http://map.daum.net/?sName=서울시청&eName=서울고속터미널 -->
+                <script type="text/javascript"
+                    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dfad8c8cf0702820c5111f7c4c05eb6&libraries=services,clusterer"></script>
+            </div>
+        </div>
+    </div>
+
+    
+    
+</div>
+
+
+
+
+<script type="text/javascript">
+    function follow(id) {
+        $.ajax({
+            url: "{%url 'follow' %}", // data를 전송할 url 입니다.
+            data: {
+                'profile_id': id
+            }, // profile_id 라는 name으로 id 값 전송
+            dataType: "json",
+            success: function (response) { // ajax 통신이 정상적으로 완료되었을 때
+                $('#message').html(response.message) //id가 message의 내용을 전송받은 message로 바꾼다
+                $('.toast').fadeIn(400).delay(100).fadeOut(400) //class가 toast인 것을 서서히 나타나게 하는 메서드입니다.
+                if (response.message == "팔로우")
+                //좋아요 눌렀을 때 
+                {
+                    $('#heart').attr("class", "fas fa-heart")
+                } else if (response.message == "팔로우 취소")
+                //좋아요 상태에서 다시 눌렀을 때 
+                {
+                    $('#heart').attr("class", "far fa-heart")
+                }
+            }
+        })
+    }
+</script>
+
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        mapOption = {
+            center: new kakao.maps.LatLng(35.871016, 127.7), // 지도의 중심좌표
+            level: 13 // 지도의 확대 레벨
+        };
+
+    //지도 생성 및 객체 리턴함
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    var list_id = document.getElementById("post_id").innerText.split(',');
+    var list_lat = document.getElementById("post_lat").innerText.split(',');
+    var list_lng = document.getElementById("post_lng").innerText.split(',');
+    var list_title = document.getElementById("post_title").innerText.split(',');
+    var list_content = document.getElementById("post_content").innerText.split(',');
+    var list_rating = document.getElementById("post_rating").innerText.split(',');
+    var list_image = document.getElementById("post_image").innerText.split(',');
+
+    var postPosition = [];
+    for (var idx = 0; idx < list_lat.length; idx++) {
+        var data_id = list_id[idx];
+        var data_lat = list_lat[idx];
+        var data_lng = list_lng[idx];
+        var data_title = list_title[idx];
+        var data_content = list_content[idx];
+        var data_rating = list_rating[idx];
+        var data_image = list_image[idx];
+        addMarker(new kakao.maps.LatLng(data_lat, data_lng), data_id, data_title, data_content, data_rating, data_image);
+
+    }
+
+    function addMarker(position, d_id, d_title, d_content, d_rating, d_image) {
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: position,
+            clickable: true
+        });
+
+        var content = '<div class="wrap">' +
+            '       <div class="info">' +
+            '           <div class="title">' +
+            d_title +
+            '           </div>' +
+            '           <div class="body">' +
+            '               <div class="img">' +
+            '                   <img src="' + d_image + '" width="73" height="70">' +
+            '               </div>' +
+            '           <div class="desc">' +
+            '               <div class="">평점' + d_rating + '</div>' +
+            '               <div class="">위치' + position + '</div>' +
+            '               <div class="">한줄평' + d_content + '</div>' +
+            '           </div>' +
+            '       </div>' +
+            '   </div>' +
+            '</div>';
+        var overlay = new kakao.maps.CustomOverlay({
+            content: content,
+            map: map,
+            position: marker.getPosition()
+        });
+
+        overlay.setMap(null);
+
+        kakao.maps.event.addListener(marker, 'mouseover', function () {
+            overlay.setMap(map)
+        });
+
+        kakao.maps.event.addListener(marker, 'mouseout', function () {
+            overlay.setMap(null)
+        });
+        kakao.maps.event.addListener(marker, 'click', function () {
+            var url = "{% url 'detail' 1 %}";
+            var id = Number(d_id);
+            console.log(d_id);
+            location.href = url.replace('1', id);
+        });
+    }
+</script>
+{%endblock%}

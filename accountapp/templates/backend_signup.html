@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<div style="margin-top:100px;"></div>
+<h1>Sign Up!</h1>
+ 
+<form method="POST" action="{% url 'signup'%}">
+{% csrf_token %}
+    아이디:
+    <input name="id" type="text" value="" class="id"><br>
+    비밀번호:
+    <input name="password1" type="password" value="" class="password"><br>
+    비밀번호 확인:
+    <input name="password2" type="password" value="" class="password"><br>
+    별명:
+    <input name="nickname" type="text" value="" ><br>
+    이름:
+    <input name="name" type="text" value=""><br>
+    성별:
+    <select name="gender" id="">
+        <option value="남성">남성</option>
+        <option value="여성">여성</option>
+    </select><br>
+    연령대:
+    <select name="age_group" id="">
+        <option value="10대">10대</option>
+        <option value="20대">20대</option>
+        <option value="30대">30대</option>
+        <option value="40대">40대</option>
+        <option value="50대">50대</option>
+        <option value="60대">60대 이상</option>
+    </select><br>
+    이메일:
+    <input name="email" type="email" value=""><br>
+    <br>
+    <input type="hidden" name="grade" value="등린이">
+    <input type="submit" value="Sign Up!">
+</form>
+{% endblock %}

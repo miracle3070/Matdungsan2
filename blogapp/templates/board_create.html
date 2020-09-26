@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/board_create_style.css' %}">
+{% endblock css %}
+
+{% block contents %}
+<div class="sign-up" style="margin-top:100px"></div>
+<main>
+    <div class="posting-box">
+        <div class="image-upload" id="image_container">
+            <img src="http://placehold.it/320x100" alt="upload image" id="placeholder" />
+        </div>
+        <div class="box-detail">
+            <form action="{% url 'board_create' %}" method="POST" enctype="multipart/form-data">
+                {%csrf_token%}
+                <p>{{request.user.profile.nickname}}님의</p>
+                <p><span id="time-result"></span> 산행</p>
+                <input name="content" id="content" class="text-box" placeholder="이 곳에 글을 쓰세요!" />
+                <input name="tags" id="tags" class="hashtag-box" placeholder="#해쉬태그 입력" />
+                <div class="button">
+                    <input type="file" name="image" id="image" accept="image/*" onchange="setThumbnail(event);"
+                        style="display:none;">
+                    <button tyle="button" class="upload" id="btn-upload">이미지 등록</button>
+                    <button type="submit" class="posting">올리기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script type="text/javascript">
+    var d = new Date();
+    var currentDate = d.getFullYear() + "년 " + (d.getMonth() + 1) + "월 " + d.getDate() + "일";
+    var result = document.getElementById("time-result");
+    result.innerHTML = currentDate;
+
+    $(function () {
+        $('#btn-upload').click(function (e) {
+            e.preventDefault();
+            $('#image').click();
+        });
+    });
+
+    function setThumbnail(event) {
+        var reader = new FileReader();
+
+        reader.onload = function (event) {
+            var img = document.createElement("img");
+            img.setAttribute("src", event.target.result);
+            $("#placeholder").attr("src", event.target.result);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block contents %}
+<div style="margin-top:100px;"></div>
+<div>
+    닉네임 : <a href="{% url 'profile' post.user.username %}">{{post.user.profile.nickname}}</a><br>
+    <img src="{{post.image.url}}" alt="" style="width: 200px; height: 200px"><br>
+    글번호 : {{post.id}}<br>
+    제목 : {{post.title}}<br>
+    작성 시간 : {{post.pub_date}}<br>
+    한줄평 : {{post.content}}<br>
+    평점 : {{post.rating}}
+    {% for tag in post.tags.all %}
+        <span>#{{tag.name}}</span>
+    {% endfor %}
+    <button id="{{post.id}}" onclick="post_like(this.id)">
+        {%if request.user in post.like.all%}
+          <!-- 로그인 한 유저가 좋아요를 누른 유저일때  -->
+          <i id="heart" class="fas fa-heart"></i>
+          {%else%}
+          <!-- 로그인 한 유저가 좋아요를 누른 유저가 아닐 때  -->
+          <i id="heart" class="far fa-heart"></i>
+          {%endif%}
+        <span id="like_count">{{post.like.count}}</span>
+    </button>
+    <div class='toast' style='display:none'>
+        <div id="message"></div>
+    </div>
+
+    
+</div>
+<hr><hr>
+<div>
+    {% if user.is_authenticated %}
+<form action="{%url 'create_comment' post.id%}" method="POST">
+    {%csrf_token%}
+    <input type="text" name="comment" placeholder="댓글을 입력하세요">
+    <input type="submit" value="submit">
+</form>
+    {% endif %}
+    <hr>
+    {% for c in comment %}
+    <span>{{c.user}}</span> ({{c.created_at}})
+    <br>{{c.content}}
+    {% if request.user == c.user or request.user.is_staff %}
+    <a href="{% url 'delete_comment' post.id c.id %}">삭제</a>
+    {% endif %}
+    <br>
+    {% endfor %}
+
+</div>
+<script type="text/javascript">
+    function post_like(id) {
+        $.ajax({
+            url: "{%url 'likes'%}", // data를 전송할 url 입니다.
+            data: {
+                'post_id': id
+            }, // post_id 라는 name으로 id 값 전송
+            dataType: "json",
+            success: function (response) { // ajax 통신이 정상적으로 완료되었을 때
+                $('#like_count').html(response.like_count) //id가 like_count의 내용을 전송받은 좋아요 수로 바꾼다
+                $('#message').html(response.message) //id가 message의 내용을 전송받은 message로 바꾼다
+                $('.toast').fadeIn(400).delay(100).fadeOut(400) //class가 toast인 것을 서서히 나타나게 하는 메서드입니다.
+                if (response.message == "좋아요")
+                //좋아요 눌렀을 때 
+                {
+                    $('#heart').attr("class", "fas fa-heart")
+                } else if (response.message == "좋아요 취소")
+                //좋아요 상태에서 다시 눌렀을 때 
+                {
+                    $('#heart').attr("class", "far fa-heart")
+                }
+            }
+        })
+    }
+</script>
+{%endblock%}

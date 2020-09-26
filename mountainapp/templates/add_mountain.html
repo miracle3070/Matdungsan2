@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>맛등산 산 정보 추가</title>
+</head>
+<body>
+    <fieldset>
+        <legend>산 정보 추가하기</legend>
+        <form method="POST" action="{% url 'add_mountain' %}">
+            {% csrf_token %}
+            <ul>
+                <li>
+                    <label>산 이름: <input type="text" name="mountain_name" placeholder="산 이름을 입력해주세요."></label>
+                </li>
+                <li>
+                    <br>
+                    <label>주소: <textarea name="mountain_address" placeholder="산 주소를 입력해주세요"></textarea></label>
+                </li>
+                <li>
+                    <br>
+                    <label>이미지: <input type="file" name="mountain_image"></label>
+                </li>
+                <li>
+                    <br>
+                    <label>위도: <input type="text" name="mountain_latitude"></label>
+                </li>
+                <li>
+                    <br>
+                    <label>경도: <input type="text" name="mountain_longtitude"></label>
+                </li>
+            </ul>
+            <input type="submit" value="완료">
+        </form>
+    </fieldset>
+    <fieldset>
+        <legend>등록된 산</legend>
+        {% for mt in mountains %}
+        <p>{{mt.name}}</p>
+        <p>{{mt.address}}</p>
+        <!-- {% if mt.image != NULL %}
+            <image src="{{ mt.image.url }}" alt="산 이미지"></image>
+        {% endif%} -->
+        <p>{{mt.latitude}}</p>
+        <p>{{mt.longtitude}}</p>
+        {% endfor %}
+    </fieldset>
+    
+</body>
+</html>

@@ -22,6 +22,7 @@
             <p>산 이름 : {{mt.name}}</p>
             <p>산 주소 : {{ mt.address }}</p>
             <p>완등한 사람 수 : {{mt.completed_count}}</p>
+            <img src="{{mt.image.url}}" alt="산 이미지" width="250" height="250">
             {% if request.user not in mt.completed.all %}
                 <form method="POST" action="{% url 'complete_climbing' request.user %}">
                     {% csrf_token %}

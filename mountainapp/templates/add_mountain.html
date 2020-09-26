@@ -12,7 +12,7 @@
             <!-- http://map.daum.net/?sName=서울시청&eName=서울고속터미널 -->
             <script type="text/javascript"
                 src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dfad8c8cf0702820c5111f7c4c05eb6&libraries=services"></script>
-        <form method="POST" action="{% url 'add_mountain' %}">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'add_mountain' %}">
             {% csrf_token %}
             <ul>
                 <li>
@@ -45,6 +45,7 @@
         <p>{{mt.address}}</p>
         <p>{{mt.latitude}}</p>
         <p>{{mt.longtitude}}</p>
+        <img src="{{ mt.image.url }}" alt="산 이미지" width="250" height="250">
         {% endfor %}
     </fieldset>
 
@@ -67,6 +68,30 @@
         document.getElementById("lat").value = latlng.getLat();
         document.getElementById("long").value = latlng.getLng();
     });
+
+
+// 지도 API에서 검색하고 싶은데 안됨 ㅠㅠ
+//     var ps = new kakao.maps.services.Places(); 
+//     ps.keywordSearch('팔공산', placesSearchCB);
+
+//     function placesSearchCB (data, status, pagination) {
+//     if (status === kakao.maps.services.Status.OK) {
+
+//         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+//         // LatLngBounds 객체에 좌표를 추가합니다
+//         var bounds = new kakao.maps.LatLngBounds();
+
+//         for (var i=0; i<data.length; i++) {
+//             displayMarker(data[i]);    
+//             bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+//         }       
+
+//         // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+//         map.setBounds(bounds);
+//     } 
+// }
+
+
     </script>
     
 </body>

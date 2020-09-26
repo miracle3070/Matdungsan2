@@ -8,6 +8,10 @@
 <body>
     <fieldset>
         <legend>산 정보 추가하기</legend>
+        <div id="map" style="width:500px;height:500px;"></div>
+            <!-- http://map.daum.net/?sName=서울시청&eName=서울고속터미널 -->
+            <script type="text/javascript"
+                src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dfad8c8cf0702820c5111f7c4c05eb6&libraries=services"></script>
         <form method="POST" action="{% url 'add_mountain' %}">
             {% csrf_token %}
             <ul>
@@ -24,11 +28,11 @@
                 </li>
                 <li>
                     <br>
-                    <label>위도: <input type="text" name="mountain_latitude"></label>
+                    <label>위도: <input type="text" id="lat" name="mountain_latitude"></label>
                 </li>
                 <li>
                     <br>
-                    <label>경도: <input type="text" name="mountain_longtitude"></label>
+                    <label>경도: <input type="text" id="long" name="mountain_longtitude"></label>
                 </li>
             </ul>
             <input type="submit" value="완료">
@@ -43,6 +47,27 @@
         <p>{{mt.longtitude}}</p>
         {% endfor %}
     </fieldset>
+
+    <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        mapOption = {
+            center: new kakao.maps.LatLng(35.871016, 127.7), // 지도의 중심좌표
+            level: 13 // 지도의 확대 레벨
+        };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    var marker = new kakao.maps.Marker({
+        map: map,
+        position: map.getCenter()
+    });
+    marker.setMap(map);
+    kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+        var latlng = mouseEvent.latLng;
+        marker.setPosition(latlng);
+        document.getElementById("lat").value = latlng.getLat();
+        document.getElementById("long").value = latlng.getLng();
+    });
+    </script>
     
 </body>
 </html>

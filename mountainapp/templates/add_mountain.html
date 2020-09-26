@@ -20,7 +20,7 @@
                 </li>
                 <li>
                     <br>
-                    <label>이미지: <input type="file" name="mountain_image"></label>
+                    <label>이미지: <input type="file" name="mountain_image" accept=".gif, .jpg, .png"></label>
                 </li>
                 <li>
                     <br>
@@ -39,9 +39,6 @@
         {% for mt in mountains %}
         <p>{{mt.name}}</p>
         <p>{{mt.address}}</p>
-        <!-- {% if mt.image != NULL %}
-            <image src="{{ mt.image.url }}" alt="산 이미지"></image>
-        {% endif%} -->
         <p>{{mt.latitude}}</p>
         <p>{{mt.longtitude}}</p>
         {% endfor %}

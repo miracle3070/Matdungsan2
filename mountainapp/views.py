@@ -14,8 +14,8 @@ def add_mountain(request): #산 추가 기능
         mountain = Mountain()
         mountain.name = request.POST['mountain_name']
         mountain.address = request.POST['mountain_address']
-        mountain.image = request.FILES['mountain_image']
-        mountain.latitude = reqeust.POST['mountain_latitude']
+    #    mountain.image = request.FILES['mountain_image']
+        mountain.latitude = request.POST['mountain_latitude']
         mountain.longtitude = request.POST['mountain_longtitude']
         mountain.save()
         return redirect(add_mountain)
